@@ -1,15 +1,17 @@
 import { Request, Response } from "express";
-import * as cardsService from "../services/cardsService"
+import * as companiesServices from "../services/companiesService";
+import * as employeesServices from "../services/employeesService";
+import * as cardsServices from "../services/cardsService";
 
-export async function postCard(req: Request, res: Response){
-    res.status(200).send('rota post card')
+async function createCard(req: Request, res: Response) {
+  if (!req.headers["x-api-key"]) return;
+  const apiKey = req.headers["x-api-key"].toString();
+  const { employeeId, type } = req.body;
+
+  companiesServices.validateApiKey(apiKey);
+  employeesServices.findEmployeeById(employeeId);
+  cardsServices.validateCardType(employeeId, type);
+
+  res.sendStatus(200);
 }
-
-export async function getCard(req: Request, res: Response){
-
-   
-    const result = await cardsService.getCard();
-    console.log(result)
-    res.status(200).send(result)
-
-}
+export { createCard };

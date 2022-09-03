@@ -11,8 +11,8 @@ async function createCard(
   employeeId: number,
   type: cardRepository.TransactionTypes
 ) {
-  employeesServices.findEmployeeById(employeeId);
-  validateCardType(employeeId, type);
+  await employeesServices.findEmployeeById(employeeId);
+  await validateCardType(employeeId, type);
   const cardData = await createCardData(employeeId, type);
   await cardRepository.insert(cardData);
 }
@@ -25,6 +25,7 @@ async function validateCardType(
     type,
     employeeId
   );
+
   if (cardType) {
     throw {
       type: "conflict",

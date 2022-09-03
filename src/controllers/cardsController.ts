@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import * as companiesServices from "../services/companiesService";
-import * as employeesServices from "../services/employeesService";
-import * as cardsServices from "../services/cardsService";
+import * as companiesServices from "../services/companiesAuthenticationServices";
+import * as cardsServices from "../services/cardCreationServices";
 
 async function createCard(req: Request, res: Response) {
   if (!req.headers["x-api-key"]) return;
@@ -9,9 +8,9 @@ async function createCard(req: Request, res: Response) {
   const { employeeId, type } = req.body;
 
   companiesServices.validateApiKey(apiKey);
-  employeesServices.findEmployeeById(employeeId);
-  cardsServices.validateCardType(employeeId, type);
+  cardsServices.createCard(employeeId, type);
 
-  res.sendStatus(200);
+  res.sendStatus(201);
 }
+
 export { createCard };

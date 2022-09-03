@@ -3,7 +3,7 @@ import Cryptr from "cryptr";
 import dayjs from "dayjs";
 import * as cardRepository from "../repositories/cardRepository";
 import * as employeeRepository from "../repositories/employeeRepository";
-import * as employeesServices from "./employeesService";
+import * as employeesServices from "./employeeManagementServices";
 
 const cryptr = new Cryptr("dummyPassword");
 
@@ -34,14 +34,14 @@ async function validateCardType(
 }
 
 function createCardNumber() {
-  return faker.finance.creditCardNumber("visa");
+  return faker.finance.creditCardNumber("mastercard");
 }
 
 async function createCardUserName(employeeId: number) {
   const employee = await employeeRepository.findById(employeeId);
   if (!employee) {
     throw {
-      type: "not found",
+      type: "not_found",
       message: `"employee with an id ${employeeId} doesn't exist! Try another id.`,
     };
   }
@@ -91,7 +91,6 @@ async function createCardData(
     cardholderName: cardUser,
     securityCode: cardCVC,
     expirationDate: cardExpirationDate,
-    password: "",
     isVirtual: false,
     isBlocked: true,
     type: type,

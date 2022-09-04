@@ -7,4 +7,13 @@ const cardCreationSchema = Joi.object({
     .required(),
 });
 
-export { cardCreationSchema };
+const cardActivationSchema = Joi.object({
+  securityCode: Joi.string()
+    .pattern(/^[0-9]{3}$/)
+    .required(),
+  password: Joi.string()
+    .pattern(/^[0-9]{4}$/)
+    .required(),
+});
+
+export { cardCreationSchema, cardActivationSchema };

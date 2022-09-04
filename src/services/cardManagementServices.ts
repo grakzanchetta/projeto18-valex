@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import * as cardRepository from "../repositories/cardRepository";
 import * as employeeRepository from "../repositories/employeeRepository";
 import * as employeesServices from "./employeeManagementServices";
+import { any } from "joi";
 
 const cryptr = new Cryptr("dummyPassword");
 
@@ -16,6 +17,7 @@ async function activateCard(cardId: number, cvc: string, password: any) {
   const hashedPassword = bcrypt.hashSync(password, 10);
 
   await cardRepository.update(cardId, { password: hashedPassword });
+  await cardRepository.update(cardId, { isBlocked: false });
   console.log(cardData);
 }
 
@@ -30,6 +32,32 @@ async function findcardByIdAndDecrypted(cardId: number) {
   return card;
 }
 
+async function blockCard(cardId: number, password: string) {
+  const cardData = await findcardByIdAndDecrypted(cardId);
+  await verifyExpirationDate(cardData.expirationDate);
+  if (cardData.isBlocked === true) {
+    throw {
+      type: "unauthorized",
+      message: `card with an id ${cardId} already blocked.`,
+    };
+  }
+  await validatePassword(password, String(cardData.password));
+  await cardRepository.update(cardId, { isBlocked: true });
+}
+
+async function unblockCard(cardId: number, password: string) {
+  const cardData = await findcardByIdAndDecrypted(cardId);
+  await verifyExpirationDate(cardData.expirationDate);
+  if (cardData.isBlocked === false) {
+    throw {
+      type: "unauthorized",
+      message: `card with an id ${cardId} isn't blocked.`,
+    };
+  }
+  await validatePassword(password, String(cardData.password));
+  await cardRepository.update(cardId, { isBlocked: false });
+}
+
 async function verifyExpirationDate(expirationDate: string) {
   const isExpired = dayjs(expirationDate).isBefore(
     dayjs(Date.now()).format("MM-YY")
@@ -37,7 +65,7 @@ async function verifyExpirationDate(expirationDate: string) {
   if (isExpired) {
     throw {
       type: "unauthorized",
-      message: `card expired. It cannot be activated`,
+      message: `card expired. It cannot be activated, blocked or unblocked`,
     };
   }
 }
@@ -61,4 +89,17 @@ async function verifyCVC(cardId: number, cvc: string) {
   }
 }
 
-export { findcardByIdAndDecrypted, activateCard };
+async function validatePassword(
+  password: string,
+  searchedCardPassword: string
+) {
+  const isPassword = bcrypt.compareSync(password, searchedCardPassword);
+  if (!isPassword) {
+    throw {
+      type: "unauthorized",
+      message: "wrong password",
+    };
+  }
+}
+
+export { findcardByIdAndDecrypted, activateCard, blockCard, unblockCard };

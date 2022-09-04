@@ -23,7 +23,22 @@ async function activateCard(req: Request, res: Response) {
     cardData.securityCode,
     cardData.password
   );
+  res.sendStatus(201);
+}
 
+async function blockCard(req: Request, res: Response) {
+  const cardId = Number(req.params.id);
+  const cardData = req.body;
+
+  await cardManagementServices.blockCard(cardId, cardData.password);
+  res.sendStatus(201);
+}
+
+async function unblockCard(req: Request, res: Response) {
+  const cardId = Number(req.params.id);
+  const cardData = req.body;
+
+  await cardManagementServices.unblockCard(cardId, cardData.password);
   res.sendStatus(201);
 }
 
@@ -36,4 +51,4 @@ async function findCardByIdAndDecrypted(req: Request, res: Response) {
   res.status(200).send(searchedCard);
 }
 
-export { createCard, findCardByIdAndDecrypted, activateCard };
+export { createCard, findCardByIdAndDecrypted, activateCard, blockCard, unblockCard };

@@ -17,6 +17,8 @@ cardsRouter.post(
 );
 
 cardsRouter.get("/cards/:id", balanceController.getBalanceCard);
+cardsRouter.get("/decrypt/:id", cardsController.findCardByIdAndDecrypted);
+
 cardsRouter.put(
   "/cards/:id",
   validateSchema(cardActivationSchema),

@@ -109,6 +109,12 @@ async function validatePassword(
 
 async function findCard(cardId: number) {
   const searchedCard = await cardRepository.findById(cardId);
+  if (!searchedCard) {
+    throw {
+      type: "not_found",
+      message: "card not found",
+    };
+  }
   return searchedCard;
 }
 
@@ -120,4 +126,5 @@ export {
   isActive,
   verifyExpirationDate,
   findCard,
+  validatePassword
 };

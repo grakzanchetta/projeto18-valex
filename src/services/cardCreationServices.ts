@@ -15,8 +15,10 @@ async function createCard(
   await validateCardType(employeeId, type);
   const cardData = await createCardData(employeeId, type);
   await cardRepository.insert(cardData);
+  const cardCVC = decryptCardCVC(cardData.securityCode);
+  const message = `Your Security Code is ${cardCVC}. Do not lose it... seriously. We don't have any means to retrieve that information.`;
 
-  return cardData;
+  return { cardData, message };
 }
 
 async function validateCardType(

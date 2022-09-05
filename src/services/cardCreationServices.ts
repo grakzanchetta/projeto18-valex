@@ -15,6 +15,8 @@ async function createCard(
   await validateCardType(employeeId, type);
   const cardData = await createCardData(employeeId, type);
   await cardRepository.insert(cardData);
+
+  return cardData;
 }
 
 async function validateCardType(

@@ -14,7 +14,6 @@ async function activateCard(cardId: number, cvc: string, password: any) {
 
   await cardRepository.update(cardId, { password: hashedPassword });
   await cardRepository.update(cardId, { isBlocked: false });
-  console.log(cardData);
 }
 
 async function findcardByIdAndDecrypted(cardId: number) {
@@ -126,5 +125,5 @@ export {
   isActive,
   verifyExpirationDate,
   findCard,
-  validatePassword
+  validatePassword,
 };

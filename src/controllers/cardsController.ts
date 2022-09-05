@@ -9,9 +9,11 @@ async function createCard(req: Request, res: Response) {
   const { employeeId, type } = req.body;
 
   await companiesServices.validateApiKey(apiKey);
-  await cardCreationServices.createCard(Number(employeeId), type);
-
-  res.sendStatus(201);
+  const cardData = await cardCreationServices.createCard(
+    Number(employeeId),
+    type
+  );
+  res.status(201).send(cardData);
 }
 
 async function activateCard(req: Request, res: Response) {

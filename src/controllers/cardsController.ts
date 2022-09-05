@@ -42,13 +42,4 @@ async function unblockCard(req: Request, res: Response) {
   res.sendStatus(201);
 }
 
-async function findCardByIdAndDecrypted(req: Request, res: Response) {
-  const cardsId = Number(req.params.id);
-  const searchedCard = await cardManagementServices.findcardByIdAndDecrypted(
-    cardsId
-  );
-
-  res.status(200).send(searchedCard);
-}
-
-export { createCard, findCardByIdAndDecrypted, activateCard, blockCard, unblockCard };
+export { createCard, activateCard, blockCard, unblockCard };

@@ -17,7 +17,6 @@ cardsRouter.post(
 );
 
 cardsRouter.get("/cards/:id", balanceController.getBalanceCard);
-cardsRouter.get("/decrypt/:id", cardsController.findCardByIdAndDecrypted); //fiz essa rota apenas para ver os CVCs
 
 cardsRouter.put(
   "/cards/:id",

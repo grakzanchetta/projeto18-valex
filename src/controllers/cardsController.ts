@@ -9,10 +9,7 @@ async function createCard(req: Request, res: Response) {
   const { employeeId, type } = req.body;
 
   await companiesServices.validateApiKey(apiKey);
-  const cardData = await cardCreationServices.createCard(
-    Number(employeeId),
-    type
-  );
+  const cardData = await cardCreationServices.createCard(Number(employeeId), type);
   res.status(201).send(cardData);
 }
 

@@ -1,11 +1,7 @@
-import { faker } from "@faker-js/faker";
 import Cryptr from "cryptr";
 import dayjs from "dayjs";
 import bcrypt from "bcrypt";
 import * as cardRepository from "../repositories/cardRepository";
-import * as employeeRepository from "../repositories/employeeRepository";
-import * as employeesServices from "./employeeManagementServices";
-import { any } from "joi";
 
 const cryptr = new Cryptr("dummyPassword");
 
@@ -58,6 +54,15 @@ async function unblockCard(cardId: number, password: string) {
   await cardRepository.update(cardId, { isBlocked: false });
 }
 
+async function isActive(active: boolean) {
+  if (active === true) {
+    throw {
+      type: "unauthorized",
+      message: `card is either blocked or inactive`,
+    };
+  }
+}
+
 async function verifyExpirationDate(expirationDate: string) {
   const isExpired = dayjs(expirationDate).isBefore(
     dayjs(Date.now()).format("MM-YY")
@@ -65,7 +70,7 @@ async function verifyExpirationDate(expirationDate: string) {
   if (isExpired) {
     throw {
       type: "unauthorized",
-      message: `card expired. It cannot be activated, blocked or unblocked`,
+      message: `card expired. It cannot be activated, blocked, unblocked or recharged`,
     };
   }
 }
@@ -102,4 +107,11 @@ async function validatePassword(
   }
 }
 
-export { findcardByIdAndDecrypted, activateCard, blockCard, unblockCard };
+export {
+  findcardByIdAndDecrypted,
+  activateCard,
+  blockCard,
+  unblockCard,
+  isActive,
+  verifyExpirationDate,
+};

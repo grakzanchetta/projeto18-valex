@@ -12,5 +12,6 @@ export default async function errorHandlerMiddleware(
     if (error.type === "conflict") return res.status(409).send(error.message);
     if (error.type === "not_found") return res.status(404).send(error.message);
   }
+  console.log(error);
   res.sendStatus(500);
 }

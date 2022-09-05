@@ -6,6 +6,7 @@ import {
   cardManageSchema,
 } from "../schemas/cardManagementSchema";
 import * as cardsController from "../controllers/cardsController";
+import * as balanceController from "../controllers/balanceController";
 
 const cardsRouter = Router();
 
@@ -15,7 +16,7 @@ cardsRouter.post(
   cardsController.createCard
 );
 
-cardsRouter.get("/cards/:id", cardsController.findCardByIdAndDecrypted);
+cardsRouter.get("/cards/:id", balanceController.getBalanceCard);
 cardsRouter.put(
   "/cards/:id",
   validateSchema(cardActivationSchema),

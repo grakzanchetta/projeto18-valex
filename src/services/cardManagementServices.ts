@@ -107,6 +107,11 @@ async function validatePassword(
   }
 }
 
+async function findCard(cardId: number) {
+  const searchedCard = await cardRepository.findById(cardId);
+  return searchedCard;
+}
+
 export {
   findcardByIdAndDecrypted,
   activateCard,
@@ -114,4 +119,5 @@ export {
   unblockCard,
   isActive,
   verifyExpirationDate,
+  findCard,
 };

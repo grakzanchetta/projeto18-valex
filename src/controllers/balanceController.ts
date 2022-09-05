@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import * as companiesServices from "../services/companiesAuthenticationServices";
 import * as cardManagementServices from "../services/cardManagementServices";
 import * as cardBalanceServices from "../services/cardBalanceServices";
-import { verify } from "crypto";
 
 async function createRecharge(req: Request, res: Response) {
   if (!req.headers["x-api-key"]) return res.sendStatus(418);
